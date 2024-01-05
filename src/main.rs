@@ -4,22 +4,34 @@
 // Process: add 5.5% tax if state is Winsconsin or WI, if not, then leave it.
 // Outputs: (Winsconsin) Subtotal, Tax, Total | (Other states) Total.
 
-fn round_decimal(number: f64, place: i64) -> f64 {
-    let multiplier = 10_f64.powi(place as i32);
+fn round_decimal(number: f64, place: i32) -> f64 {
+    let multiplier: f64 = 10_f64.powi(place);
     (number * multiplier).round() / multiplier
 }
 
 fn calculate_tax(order_amount: f64, tax_percentage: f64) -> (f64, f64) {
-    // calculate the tax
-    // round to 2 digits
-    // return (tax, total)
-    (1.0, 1.0)
-
+    let tax = order_amount * (tax_percentage / 100.0);
+    let total = order_amount + tax;
+    (round_decimal(tax, 2), round_decimal(total, 2))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_calculate_tax() {
+        assert_eq!(calculate_tax(10.0, 5.5), (0.55, 10.55));
+        
+        // Check for zero order amount, expecting zero tax and total
+        assert_eq!(calculate_tax(0.0, 5.0), (0.0, 0.0));
+    
+        // Check for negative tax percentage, expecting negative tax and total
+        assert_eq!(calculate_tax(200.0, -8.0), (-16.0, 184.0));
+    
+        // Check for large order amount and tax percentage
+        assert_eq!(calculate_tax(999999.99, 20.0), (200000.0, 1199999.99));
+    }
 
     #[test]
     fn test_round_decimal() {
