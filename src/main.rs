@@ -1,3 +1,5 @@
+use std::io;
+use std::io::Write;
 // write a simple program to compute tax and amount. Only add the tax if the state is Winsconsin or WI.
 
 // Inputs: Order amount, and state.
@@ -22,7 +24,7 @@ mod tests {
     #[test]
     fn test_calculate_tax() {
         assert_eq!(calculate_tax(10.0, 5.5), (0.55, 10.55));
-        
+
         // Check for zero order amount, expecting zero tax and total
         assert_eq!(calculate_tax(0.0, 5.0), (0.0, 0.0));
     
@@ -49,6 +51,20 @@ mod tests {
     }
 }
 
+fn get_input<T: std::str::FromStr>(prompt: &str) -> T {
+    loop {
+        print!("{}", prompt);
+        io::stdout().flush().unwrap();
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).expect("Failed to read input");
+
+        match input.trim().parse() {
+            Ok(value) => break value,
+            Err(_) => println!("Invalid input. Please try again."),
+        }
+    }
+}
 
 fn main() {
     // states = [{names: ["winsconsin", "wi"], tax_percentage: 5.5}]
