@@ -66,20 +66,27 @@ fn get_input<T: std::str::FromStr>(prompt: &str) -> T {
     }
 }
 
+#[derive(Debug)]
 struct State {
-    names: Vec<&str>,
-    tax_percentage: f32,
+    names: Vec<String>,
+    tax_percentage: f64,
 }
 
 fn main() {
     let states = vec![
         State {
-            names: vec!["wisconsin", "wi"],
+            names: vec!["wisconsin".to_string(), "wi".to_string()],
             tax_percentage: 5.5,
         }
     ];
+
     // Prompt for order_amount with message "What is the order amount? "
+    let order_amount: f64 = get_input("What is the order amount? ");
     // Prompt for state with message "What is the state? "
+    let state_input: String = get_input("What is the state? ");
+
+    let taxed_state = states.iter().find(|state| state.names.contains(&state_input.to_lowercase()));
+
     // if state is in states
         // get the tax and total
         // print "The subtotal is ${}."
@@ -87,4 +94,16 @@ fn main() {
         // print "The total is ${}."
     // else
         // print "The total is $10.00."
+    match taxed_state {
+        Some(state) => {
+            let (tax, total): (f64, f64) = calculate_tax(order_amount, state.tax_percentage);
+            println!("The subtotal is ${}.", order_amount);
+            println!("The tax is ${}.", tax);
+            println!("The total is ${}.", total);
+        },
+        None => {
+            println!("The total is ${}.", order_amount);
+        }
+    }
+
 }
