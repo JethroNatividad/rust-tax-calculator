@@ -66,8 +66,18 @@ fn get_input<T: std::str::FromStr>(prompt: &str) -> T {
     }
 }
 
+struct State {
+    names: Vec<&str>,
+    tax_percentage: f32,
+}
+
 fn main() {
-    // states = [{names: ["winsconsin", "wi"], tax_percentage: 5.5}]
+    let states = vec![
+        State {
+            names: vec!["wisconsin", "wi"],
+            tax_percentage: 5.5,
+        }
+    ];
     // Prompt for order_amount with message "What is the order amount? "
     // Prompt for state with message "What is the state? "
     // if state is in states
