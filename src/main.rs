@@ -13,9 +13,29 @@ fn calculate_tax(order_amount: f64, tax_percentage: f64) -> (f64, f64) {
     // calculate the tax
     // round to 2 digits
     // return (tax, total)
+    (1.0, 1.0)
 
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_round_decimal() {
+        // Test rounding to 2 decimal places
+        assert_eq!(round_decimal(3.14159, 2), 3.14);
+        assert_eq!(round_decimal(6.666666, 2), 6.67);
+
+        // Test rounding to 4 decimal places
+        assert_eq!(round_decimal(2.718281828, 4), 2.7183);
+        assert_eq!(round_decimal(9.999999999, 4), 10.0);
+
+        // Test rounding to 0 decimal places
+        assert_eq!(round_decimal(123.456789, 0), 123.0);
+        assert_eq!(round_decimal(0.987654321, 0), 1.0);
+    }
+}
 
 
 fn main() {
